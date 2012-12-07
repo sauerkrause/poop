@@ -5,8 +5,6 @@
 #include <string>
 #include <map>
 
-#include <unistd.h>
-
 #include "continuation.h"
 #include "poop.h"
 
