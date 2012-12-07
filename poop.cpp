@@ -38,8 +38,6 @@ void evaluate(continuation & cont) {
   for(; cont.pc < cont.program.size(); ++cont.pc) {
     char currentOp = cont.program[cont.pc];
     switch (currentOp) {
-    case '+':
-      add(cont);
     case '`':
       readName(cont);
       break;
