@@ -1,5 +1,8 @@
 all : poop
-	
+
+
+clean :
+	rm *.o
 
 poop.o : poop.cpp poop.h
 	g++ -g -c poop.cpp
