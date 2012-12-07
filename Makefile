@@ -1,11 +1,11 @@
 all : poop
 	
 
-lang.o : lang.cpp lang.h
-	g++ -g -c lang.cpp
+poop.o : poop.cpp poop.h
+	g++ -g -c poop.cpp
 
 continuation.o : continuation.cpp continuation.h
 	g++ -g -c continuation.cpp
 
-poop : lang.o continuation.o
-	g++ -g continuation.o lang.o -o poop
+poop : poop.o continuation.o
+	g++ -g continuation.o poop.o -o poop
