@@ -4,11 +4,16 @@
 #include <vector>
 #include <string>
 #include <map>
+
+#include <unistd.h>
+
 #include "continuation.h"
-#include "lang.h"
+#include "poop.h"
+
 
 // The map of global variables.
 std::map<std::string, int> globals;
+std::map<std::string, continuation> continuations;
 
 int main(int argc, char** argv) {
   if(argc != 2) {
@@ -20,7 +25,6 @@ int main(int argc, char** argv) {
     
   std::ifstream fin(argv[1]);
   std::copy(std::istream_iterator<char>(fin), std::istream_iterator<char>(), std::back_inserter(cc.program));
-  cc.pc = cc.program.begin();
   evaluate(cc);
 
   return 0;
@@ -31,8 +35,8 @@ void zeroAccumulator(continuation & cont) {
 }
 
 void evaluate(continuation & cont) {
-  for(cont.pc; cont.pc != cont.program.end(); ++cont.pc) {
-    char currentOp = *cont.pc;
+  for(; cont.pc < cont.program.size(); ++cont.pc) {
+    char currentOp = cont.program[cont.pc];
     switch (currentOp) {
     case '`':
       readName(cont);
@@ -48,26 +52,53 @@ void evaluate(continuation & cont) {
       break;
     case '{':
       cont.stack.push_back(cont.registers);
-      ++cont.pc;
-      evaluate(cont);
       break;
     case '}':
       cont.registers = std::map<std::string, int>(cont.stack.back());
       cont.stack.pop_back();
-      return;
+      break;
+    case '*':
+      stuffContinuation(cont);
+      break;
+    case '!':
+      takeContinuation(cont);
+      break;
     default:
-      //      std::cout << currentOp;
+      // It's a comment!
       break;
     }
   }
 }
 
+// Stuffs the current continuation into a named global.
+void stuffContinuation(continuation & cont) {
+  std::string name;
+  while(++cont.pc < cont.program.size()) {
+    char c = cont.program[cont.pc];
+    if(c == '|')
+      break;
+    name.push_back(c);
+  }
+  continuations[name] = cont;
+  zeroAccumulator(cont);
+}
 
+// Takes the current continuation and shoves it in the trash
+void takeContinuation(continuation & cont) {
+  std::string name;
+  while(++cont.pc < cont.program.size()) {
+    char c = cont.program[cont.pc];
+    if(c == '|')
+      break;
+    name.push_back(c);
+  }
+  cont = continuation(continuations[name]);
+}
 // Sets the value of a register on the current frame.
 void setRegister(continuation & cont) {
   ++cont.pc;
   std::string name;
-  int c = *cont.pc;
+  int c = cont.program[cont.pc];
   switch(c) {
   case '1':
     std::cout << (char)cont.accumulator;
@@ -76,15 +107,13 @@ void setRegister(continuation & cont) {
     std::cerr << (char)cont.accumulator;
     goto doneSetRegister;
   case '`':
-    ++cont.pc;
     break;
   default:
     goto doneSetRegister;
   }
-  while(cont.pc != cont.program.end() && *cont.pc != '\'') {
-    int c = *cont.pc;
+  while(++cont.pc < cont.program.size() && cont.program[cont.pc] != '\'') {
+    char c = cont.program[cont.pc];
     name.push_back(c);
-    ++cont.pc;
   }
   cont.registers[name] = cont.accumulator;
  doneSetRegister:
@@ -95,8 +124,9 @@ void setRegister(continuation & cont) {
 // Reads a value of a register off the current frame.
 void readName(continuation & cont) {
   std::string name;
-  for(++cont.pc; cont.pc != cont.program.end(); ++cont.pc) {
-    char currentOp = *cont.pc;
+  ++cont.pc;
+  for(; cont.pc < cont.program.size(); ++cont.pc) {
+    char currentOp = cont.program[cont.pc];
     switch(currentOp) {
     case '\'':
       goto escapeReadNameLoop;
