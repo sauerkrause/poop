@@ -1,0 +1,14 @@
+#!/Users/krause/a.out
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^>`name'
+^^^^^^^^^^>`newline'
+new function to compute value
+{
+`name'
+}>`value'
+`value'>1
+`newline'>1
+`value'-^->`value'
+`value'>1
+`newline'>1
+`name'>1
+`newline'>1
