@@ -1,4 +1,4 @@
-all : shit
+all : poop
 	
 
 lang.o : lang.cpp lang.h
@@ -7,5 +7,5 @@ lang.o : lang.cpp lang.h
 continuation.o : continuation.cpp continuation.h
 	g++ -g -c continuation.cpp
 
-shit : lang.o continuation.o
-	g++ -g continuation.o lang.o -o shit
+poop : lang.o continuation.o
+	g++ -g continuation.o lang.o -o poop
