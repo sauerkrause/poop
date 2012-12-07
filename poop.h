@@ -10,13 +10,19 @@ void setRegister(continuation & cont);
 // Sets the accumulator to the value of the register.
 void readName(continuation & cont);
 
+// Sets the accumulator to the value of the global register.
+void readGlobalName(continuation & cont);
+
 // Trashes the current continuation in favor of the passed continuation.
-void takeContinuation(continuation & cont);
+void takeContinuation(continuation & cont, bool branch);
 
 // Stuffs the current continuation into a named global.
 void stuffContinuation(continuation & cont);
 
 // Evaluates the continuation passed.
 void evaluate(continuation & cont);
+
+// Adds a name to accumulator.
+void add(continuation & cont);
 
 #endif

@@ -15,6 +15,8 @@
 std::map<std::string, int> globals;
 std::map<std::string, continuation> continuations;
 
+static void readSomeName(continuation & cont, bool global);
+
 int main(int argc, char** argv) {
   if(argc != 2) {
     std::cout << "Please supply an argument file!" << std::endl;
@@ -38,9 +40,13 @@ void evaluate(continuation & cont) {
   for(; cont.pc < cont.program.size(); ++cont.pc) {
     char currentOp = cont.program[cont.pc];
     switch (currentOp) {
+    case '+':
+      add(cont);
     case '`':
       readName(cont);
       break;
+    case ';':
+      readGlobalName(cont);
     case '^':
       ++cont.accumulator;
       break;
@@ -60,8 +66,11 @@ void evaluate(continuation & cont) {
     case '*':
       stuffContinuation(cont);
       break;
+    case '?':
+      takeContinuation(cont, true);
+      break;
     case '!':
-      takeContinuation(cont);
+      takeContinuation(cont, false);
       break;
     default:
       // It's a comment!
@@ -84,7 +93,7 @@ void stuffContinuation(continuation & cont) {
 }
 
 // Takes the current continuation and shoves it in the trash
-void takeContinuation(continuation & cont) {
+void takeContinuation(continuation & cont, bool branch) {
   std::string name;
   while(++cont.pc < cont.program.size()) {
     char c = cont.program[cont.pc];
@@ -92,12 +101,14 @@ void takeContinuation(continuation & cont) {
       break;
     name.push_back(c);
   }
-  cont = continuation(continuations[name]);
+  if(continuations.count(name) && (!branch || (branch && cont.accumulator)))
+    cont = continuation(continuations[name]);
 }
 // Sets the value of a register on the current frame.
 void setRegister(continuation & cont) {
   ++cont.pc;
   std::string name;
+  bool global = false;
   int c = cont.program[cont.pc];
   switch(c) {
   case '1':
@@ -108,6 +119,9 @@ void setRegister(continuation & cont) {
     goto doneSetRegister;
   case '`':
     break;
+  case ';':
+    global = true;
+    break;
   default:
     goto doneSetRegister;
   }
@@ -115,20 +129,35 @@ void setRegister(continuation & cont) {
     char c = cont.program[cont.pc];
     name.push_back(c);
   }
-  cont.registers[name] = cont.accumulator;
+  if(global)
+    globals[name] = cont.accumulator;
+  else
+    cont.registers[name] = cont.accumulator;
  doneSetRegister:
   zeroAccumulator(cont);
   return;
 }
 
+// Reads a value of a register off the global frame.
+void readGlobalName(continuation & cont) {
+  readSomeName(cont, true);
+}
 // Reads a value of a register off the current frame.
 void readName(continuation & cont) {
+  readSomeName(cont, false);
+}
+
+void readSomeName(continuation & cont, bool global) {
   std::string name;
   ++cont.pc;
+  bool add = false;
   for(; cont.pc < cont.program.size(); ++cont.pc) {
     char currentOp = cont.program[cont.pc];
     switch(currentOp) {
     case '\'':
+      goto escapeReadNameLoop;
+    case '+':
+      add = true;
       goto escapeReadNameLoop;
     default:
       name.push_back(currentOp);
@@ -137,7 +166,10 @@ void readName(continuation & cont) {
   }
  escapeReadNameLoop:
   if(name.size()) {
-    cont.accumulator = cont.registers[name];
+    if(global)
+      cont.accumulator = add ? cont.accumulator + globals[name] : globals[name];
+    else
+      cont.accumulator = add ? cont.accumulator + cont.registers[name] : cont.registers[name];
   }
   return;
 }
