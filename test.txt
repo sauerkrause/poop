@@ -1,7 +1,5 @@
-#!/Users/krause/a.out
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^>`name'
 ^^^^^^^^^^>`newline'
-new function to compute value
 {
 `name'
 }>`value'
