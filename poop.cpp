@@ -53,7 +53,7 @@ void evaluate(continuation & cont) {
     case '>':
       setRegister(cont);
       break;
-    case '1':
+    case '0':
       acceptInput(cont);
       break;
     case '{':
