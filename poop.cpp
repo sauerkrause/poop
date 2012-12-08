@@ -63,10 +63,7 @@ void evaluate(continuation & cont) {
       stuffContinuation(cont);
       break;
     case '?':
-      takeContinuation(cont, true);
-      break;
-    case '!':
-      takeContinuation(cont, false);
+      takeContinuation(cont);
       break;
     default:
       // It's a comment!
@@ -89,7 +86,7 @@ void stuffContinuation(continuation & cont) {
 }
 
 // Takes the current continuation and shoves it in the trash
-void takeContinuation(continuation & cont, bool branch) {
+void takeContinuation(continuation & cont) {
   std::string name;
   while(++cont.pc < cont.program.size()) {
     char c = cont.program[cont.pc];
@@ -97,7 +94,7 @@ void takeContinuation(continuation & cont, bool branch) {
       break;
     name.push_back(c);
   }
-  if(continuations.count(name) && (!branch || (branch && cont.accumulator)))
+  if(continuations.count(name) && cont.accumulator)
     cont = continuation(continuations[name]);
 }
 // Sets the value of a register on the current frame.

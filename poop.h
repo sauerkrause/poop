@@ -14,7 +14,7 @@ void readName(continuation & cont);
 void readGlobalName(continuation & cont);
 
 // Trashes the current continuation in favor of the passed continuation.
-void takeContinuation(continuation & cont, bool branch);
+void takeContinuation(continuation & cont);
 
 // Stuffs the current continuation into a named global.
 void stuffContinuation(continuation & cont);

@@ -15,8 +15,8 @@ Turing tarpit language currently writing for PLT Games competition
 >2 		  stuffs the accumulator onto stderr as an ASCII character
 
 *some-text| 	  places current continuation in continuation variable "some-text"
-!some-text| 	  replaces current continuation with continuation variable "some-text"
-?some-text| 	  replaces current continuation with continuation variable "some-text" if the accumulator is non-zero
+?some-text| 	  replaces current continuation with continuation variable 
+		  "some-text" if the accumulator is non-zero
 { 		  creates a new scope
 } 		  exits the current scope, if any.
 
