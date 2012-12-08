@@ -21,4 +21,6 @@ Turing tarpit language currently writing for PLT Games competition
 { 		  creates a new scope
 } 		  exits the current scope, if any.
 
-local registers are dynamically scoped.
+local registers are accessible in subscopes, but any assignments simply shadow
+the values much like pass by value arguments in languages like C. The 
+accumulator will however remain when a scope is exited.
