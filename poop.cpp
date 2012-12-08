@@ -43,6 +43,7 @@ void evaluate(continuation & cont) {
       break;
     case ';':
       readGlobalName(cont);
+      break;
     case '^':
       ++cont.accumulator;
       break;

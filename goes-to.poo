@@ -1,0 +1,9 @@
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^>`char-incr'
+^^^^^^^^^^>`new-line'
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^>`space'
+^^^^^^^^^>;goes-to-arg'
+{*goes-to|
+;goes-to-arg'`char-incr+>1`space'>1
+^-;goes-to-arg+>;goes-to-arg'
+;goes-to-arg'?goes-to|
+;goes-to-arg'}`char-incr+>1`new-line'>1
