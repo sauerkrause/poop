@@ -4,6 +4,9 @@
 // Zeros the accumulator.
 void zeroAccumulator(continuation & cont);
 
+// Accept a character from stdin
+void acceptInput(continuation & cont);
+
 // Sets a register to the value of the accumulator.
 void setRegister(continuation & cont);
 

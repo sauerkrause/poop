@@ -13,8 +13,9 @@ Turing tarpit language currently writing for PLT Games competition
 >;some-text' 	  stuffs the accumulator into global register "some-text"
 >1 		  stuffs the accumulator onto stdout as an ASCII character
 >2 		  stuffs the accumulator onto stderr as an ASCII character
-
-*some-text| 	  places current continuation in continuation variable "some-text"
+1		  reads a character from stdin and places in accumulator
+*some-text| 	  places current continuation in continuation variable 
+		  "some-text"
 ?some-text| 	  replaces current continuation with continuation variable 
 		  "some-text" if the accumulator is non-zero
 { 		  creates a new scope

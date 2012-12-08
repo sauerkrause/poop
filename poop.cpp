@@ -53,6 +53,9 @@ void evaluate(continuation & cont) {
     case '>':
       setRegister(cont);
       break;
+    case '1':
+      acceptInput(cont);
+      break;
     case '{':
       cont.stack.push_back(cont.registers);
       break;
@@ -71,6 +74,12 @@ void evaluate(continuation & cont) {
       break;
     }
   }
+}
+
+void acceptInput(continuation & cont) {
+  char c;
+  std::cin >> c;
+  cont.accumulator = c;
 }
 
 // Stuffs the current continuation into a named global.

@@ -2,6 +2,7 @@
 ^^^^^^^^^^>`new-line'
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^>`space'
 ^^^^^^^^^>;goes-to-arg'
+1-`char-incr+'->;goes-to-arg'
 {*goes-to|
 ;goes-to-arg'`char-incr+>1`space'>1
 ^-;goes-to-arg+>;goes-to-arg'
